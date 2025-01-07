@@ -1,0 +1,13 @@
+diff --git a/bin.cjs b/bin.cjs
+index 57fc644d790960dcd33f72f183358722ea155b26..927101de3b67bdbeb08a3a1ff4a8bc07846b6c89 100755
+--- a/bin.cjs
++++ b/bin.cjs
+@@ -76005,6 +76005,8 @@ var init_introspect_pg = __esm({
+     };
+     paramNameFor = (name, schema5) => {
+       const schemaSuffix = schema5 && schema5 !== "public" ? `In${schema5.capitalise()}` : "";
++      const schemaPrefix = schema5 && schema5 !== "public" ? `${schema5}` : "";
++      return `${schemaPrefix}_${name}`
+       return `${name}${schemaSuffix}`;
+     };
+     schemaToTypeScript3 = (schema5, casing2) => {
