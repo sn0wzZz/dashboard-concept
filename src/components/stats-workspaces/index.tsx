@@ -5,7 +5,8 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
 
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartConfig, ChartContainer } from '@/components/ui/chart'
-import { useState } from 'react'
+import { use, useState } from 'react'
+
 import { WorkspaceWithUserCount } from '../../../types'
 
 const chartConfig = {
@@ -16,16 +17,18 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function StatsWorkspaces({
-  workspaces,
+  workspacesPromise,
 }: {
-  workspaces: WorkspaceWithUserCount[]
+  workspacesPromise: Promise<WorkspaceWithUserCount[]>
 }) {
+  const workspaces = use(workspacesPromise)
   const [selectedDays, setSelectedDays] = useState('all')
 
   const filteredWorkspaces = workspaces.filter((workspace) => {
     if (selectedDays === 'all') return true
     const daysAgo =
-      new Date().getTime() - new Date(workspace?.workspace?.createdAt ?? '').getTime()
+      new Date().getTime() -
+      new Date(workspace?.workspace?.createdAt ?? '').getTime()
     const daysDiff = daysAgo / (1000 * 60 * 60 * 24)
     return daysDiff <= parseInt(selectedDays)
   })

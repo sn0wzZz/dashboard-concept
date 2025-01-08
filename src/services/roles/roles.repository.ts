@@ -2,7 +2,7 @@ import { coreRoles } from '../../../migrations/schema'
 import { desc } from 'drizzle-orm'
 import { IRolesRepository } from '@/di/repositories/core/roles.repository.interface'
 
-export const UsersRepository:IRolesRepository = {
+export const RolesRepository:IRolesRepository = {
   findManyRoles: async (input,options) => {
     const promise = options.db
       .select()

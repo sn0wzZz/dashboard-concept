@@ -1,11 +1,13 @@
 import { IUsersRepository } from '@/di/repositories/core/users.repository.interface'
-import { coreRoles, coreUsers, coreUsersRoles } from '../../../migrations/schema'
+import {
+  coreRoles,
+  coreUsers,
+  coreUsersRoles,
+} from '../../../migrations/schema'
 import { desc, eq } from 'drizzle-orm'
 import { UserWithRoles } from '../../../types'
 
-
 export const UsersRepository: IUsersRepository = {
-
   findManyUsers: async (input, options) => {
     const promise = options.db
       .select()
@@ -17,12 +19,12 @@ export const UsersRepository: IUsersRepository = {
 
     return await promise
   },
-  
+
   findManyUsersWithRoles: async (input, options) => {
     const promise = options.db
       .select({
         users: coreUsers,
-        roles: coreRoles
+        roles: coreRoles,
       })
       .from(coreUsers)
       .leftJoin(coreUsersRoles, eq(coreUsers.id, coreUsersRoles.userId))
@@ -34,9 +36,9 @@ export const UsersRepository: IUsersRepository = {
 
     const result = await promise
 
-    return result.map(row => ({
+    return result.map((row) => ({
       users: row.users,
-      roles: row.roles
+      roles: row.roles,
     })) as UserWithRoles[]
   },
 }

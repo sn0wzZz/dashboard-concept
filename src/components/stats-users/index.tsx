@@ -3,20 +3,15 @@
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
-import {
-  Card,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
+import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent
+  ChartTooltipContent,
 } from '@/components/ui/chart'
-import { useState } from 'react'
+import { use, useState } from 'react'
 import { UserWithRoles } from '../../../types'
-
 
 const chartConfig = {
   premium: {
@@ -29,7 +24,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function StatsUsers({users} : {users:UserWithRoles[]}) {
+export function StatsUsers({
+  usersPromise,
+}: {
+  usersPromise: Promise<UserWithRoles[]>
+}) {
+  const users = use(usersPromise)
   const [selectedDays, setSelectedDays] = useState('all')
 
   const filteredUsers = users.filter((user) => {
@@ -65,9 +65,6 @@ export function StatsUsers({users} : {users:UserWithRoles[]}) {
         <div className='flex justify-between items-center'>
           <div className='flex flex-col gap-1'>
             <CardTitle>Users by month</CardTitle>
-            {/* <CardDescription>
-              Showing total users for the last 12 months
-            </CardDescription> */}
           </div>
 
           <Tabs defaultValue='all' onValueChange={setSelectedDays}>
@@ -81,44 +78,44 @@ export function StatsUsers({users} : {users:UserWithRoles[]}) {
         </div>
       </CardHeader>
       <ChartContainer config={chartConfig}>
-          <AreaChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 22,
-              right: 22,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dot" />}
-            />
-            <Area
-              dataKey="premium"
-              type="natural"
-              fill="hsl(var(--chart-1))"
-              fillOpacity={0.4}
-              stroke="hsl(var(--chart-1))"
-              stackId="a"
-            />
-            <Area
-              dataKey="regular"
-              type="natural"
-              fill="hsl(var(--chart-2))"
-              fillOpacity={0.4}
-              stroke="hsl(var(--chart-2))"
-              stackId="a"
-            />
-          </AreaChart>
-        </ChartContainer>
-      </Card>
+        <AreaChart
+          accessibilityLayer
+          data={chartData}
+          margin={{
+            left: 22,
+            right: 22,
+          }}
+        >
+          <CartesianGrid vertical={false} />
+          <XAxis
+            dataKey='month'
+            tickLine={false}
+            axisLine={false}
+            tickMargin={8}
+            tickFormatter={(value) => value.slice(0, 3)}
+          />
+          <ChartTooltip
+            cursor={false}
+            content={<ChartTooltipContent indicator='dot' />}
+          />
+          <Area
+            dataKey='premium'
+            type='natural'
+            fill='hsl(var(--chart-1))'
+            fillOpacity={0.4}
+            stroke='hsl(var(--chart-1))'
+            stackId='a'
+          />
+          <Area
+            dataKey='regular'
+            type='natural'
+            fill='hsl(var(--chart-2))'
+            fillOpacity={0.4}
+            stroke='hsl(var(--chart-2))'
+            stackId='a'
+          />
+        </AreaChart>
+      </ChartContainer>
+    </Card>
   )
 }
